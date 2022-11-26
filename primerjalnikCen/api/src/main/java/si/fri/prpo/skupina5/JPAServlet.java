@@ -31,8 +31,6 @@ public class JPAServlet extends HttpServlet {
     @Inject
     private KosaricaZrno kosaricaZrno;
 
-    @Inject
-    private CDIZrno cdiZrno;
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -54,17 +52,7 @@ public class JPAServlet extends HttpServlet {
             listIterator.next();
             i++;
         }
-        List<Trgovina> trgovine = trgovinaZrno.getTrgovine();
-        ListIterator<Trgovina> listIterator2 = trgovine.listIterator();
-        i=0;
-        resp.getWriter().println("Trgovine:");
-        while(listIterator2.hasNext()){
-            resp.getWriter().println(trgovine.get(i).getIme());
-            //resp.getWriter().println(trgovine.get(i).getSeznamIzdelkov().get(i).getIme());
-            i++;
-            listIterator2.next();
-        }
-        List<Izdelek> izdelkiCriteria = cdiZrno.getAllIzdelkiWithCriteria();
+        List<Izdelek> izdelkiCriteria = izdelkiZrno.getAllIzdelkiWithCriteria();
         i=0;
         ListIterator<Izdelek> listIterator3 = izdelkiCriteria.listIterator();
         resp.getWriter().println("Z Criteria API:");
@@ -78,6 +66,27 @@ public class JPAServlet extends HttpServlet {
             listIterator3.next();
         }
 
+        List<Trgovina> trgovine = trgovinaZrno.getTrgovine();
+        ListIterator<Trgovina> listIterator2 = trgovine.listIterator();
+        i=0;
+        resp.getWriter().println("Trgovine:");
+        while(listIterator2.hasNext()){
+            resp.getWriter().println(trgovine.get(i).getIme());
+            //resp.getWriter().println(trgovine.get(i).getSeznamIzdelkov().get(i).getIme());
+            i++;
+            listIterator2.next();
+        }
+        List<Trgovina> trgovineCAPI = trgovinaZrno.getAllTrgovineWithCriteria();
+        ListIterator<Trgovina> listIteratorTAPI = trgovineCAPI.listIterator();
+        i=0;
+        resp.getWriter().println("Trgovine z CriteriaAPI:");
+        while(listIteratorTAPI.hasNext()){
+            resp.getWriter().println(trgovineCAPI.get(i).getIme());
+            //resp.getWriter().println(trgovine.get(i).getSeznamIzdelkov().get(i).getIme());
+            i++;
+            listIteratorTAPI.next();
+        }
+
         List<Kategorija> kategorije = kategorijaZrno.getKategorije();
         ListIterator<Kategorija> listIterator4 = kategorije.listIterator();
         i=0;
@@ -89,16 +98,42 @@ public class JPAServlet extends HttpServlet {
             i++;
             listIterator4.next();
         }
+        List<Kategorija> kategorijeCAPI = kategorijaZrno.getAllKategorijeWithCriteria();
+        ListIterator<Kategorija> listIteratorKAPI = kategorijeCAPI.listIterator();
+        i=0;
+        resp.getWriter().println("Kategorije s C api:");
+        while(listIteratorKAPI.hasNext()){
+            resp.getWriter().print(kategorijeCAPI.get(i).getIme()+", ");
+            resp.getWriter().println(kategorijeCAPI.get(i).getOpis());
+            // resp.getWriter().println(kategorije.get(i).getSeznamIzdelkov());
+            i++;
+            listIteratorKAPI.next();
+        }
+
+
+
         List<Kosarica> kosarice = kosaricaZrno.getKosarice();
         ListIterator<Kosarica> listIterator5 = kosarice.listIterator();
         resp.getWriter().println("Kosarice:");
         i=0;
         while(listIterator5.hasNext()){
-            resp.getWriter().print(kosarice.get(i).getIme() + ", ");
+            resp.getWriter().println(kosarice.get(i).getIme());
             //resp.getWriter().println(kosarice.get(i).getIzdelki());
             i++;
             listIterator5.next();
         }
+        List<Kosarica> kosariceAPI = kosaricaZrno.getAllKosariceWithCriteria();
+        ListIterator<Kosarica> listIteratorAPI = kosariceAPI.listIterator();
+        resp.getWriter().println("Kosarice s Criteria API:");
+        i=0;
+        while(listIteratorAPI.hasNext()){
+            resp.getWriter().println(kosariceAPI.get(i).getIme());
+            //resp.getWriter().println(kosarice.get(i).getIzdelki());
+            i++;
+            listIteratorAPI.next();
+        }
+
+
 
     }
 }
