@@ -85,7 +85,7 @@ public class IzdelkiZrno {
         return i;
     }
 
-    @   Transactional
+    @Transactional
     public Izdelek posodobiIzdelek(int idIzdelka, Izdelek i){
         Izdelek iz = getIzdelekById(idIzdelka);
         if(iz != null){ //preverimo da tak izdelek sploh obstaja

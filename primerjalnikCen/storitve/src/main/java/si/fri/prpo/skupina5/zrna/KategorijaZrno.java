@@ -3,11 +3,13 @@ package si.fri.prpo.skupina5.zrna;
 
 import si.fri.prpo.skupina5.entitete.Izdelek;
 import si.fri.prpo.skupina5.entitete.Kategorija;
+import si.fri.prpo.skupina5.entitete.Trgovina;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.enterprise.context.ApplicationScoped;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -38,6 +40,10 @@ public class KategorijaZrno {
 
         //zapiranje virov
     }
+
+
+
+
     public List<Kategorija> getKategorije() {
 
         List<Kategorija> kategorije=em.createNamedQuery("Kategorija.getAll").getResultList();
@@ -55,6 +61,24 @@ public class KategorijaZrno {
         List<Kategorija> seznam = query.getResultList();
 
         return seznam;
+    }
+
+
+    public List<Izdelek> getIzdelkiFromKategorija(String ime){
+        List<Izdelek> seznam =em.createNamedQuery("Kategorija.getSeznamFromIme").setParameter("ime",ime).getResultList();
+
+        return seznam;
+    }
+    public Kategorija getKategorijaFromIme(String ime){
+        Kategorija a=null;
+        try{
+            Object t=em.createNamedQuery("Kategorija.getAllByIme").setParameter("ime",ime).getSingleResult();
+            a=(Kategorija) t;
+        }catch(NoResultException e){
+            log.info("get single result je vrnilo napako");
+        }
+
+        return a;
     }
 
 

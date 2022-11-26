@@ -1,6 +1,7 @@
 package si.fri.prpo.skupina5.zrna;
 
 
+import si.fri.prpo.skupina5.entitete.Izdelek;
 import si.fri.prpo.skupina5.entitete.Kategorija;
 import si.fri.prpo.skupina5.entitete.Trgovina;
 
@@ -8,6 +9,7 @@ import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.enterprise.context.ApplicationScoped;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -56,6 +58,23 @@ public class TrgovinaZrno {
         List<Trgovina> seznam = query.getResultList();
 
         return seznam;
+    }
+
+    public List<Izdelek> getTrgovinaSeznamFromIme(String ime){
+      return(em.createNamedQuery("Trgovina.getSeznamFromIme").setParameter("ime",ime).getResultList());
+    }
+
+    public Trgovina getTrgovinaFromIme(String ime){
+        Trgovina trg=em.find(Trgovina.class,ime);
+        Trgovina a=null;
+        try{
+            Object t=em.createNamedQuery("Trgovina.getTrgovinaFromIme").setParameter("ime",ime).getSingleResult();
+            a=(Trgovina) t;
+        }catch(NoResultException e){
+            log.info("get single result je vrnilo napako");
+        }
+
+        return a;
     }
 
     //implementacija se ostalih CRUD operacij
