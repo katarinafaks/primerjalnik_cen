@@ -10,7 +10,8 @@ import javax.persistence.*;
                 @NamedQuery(name = "Izdelek.getAllfromId",query="SELECT o FROM izdelek o WHERE o.id = :id"),
                 @NamedQuery(name= "Izdelek.getTrgovina",query = "SELECT o.trgovina FROM izdelek o"),
                 @NamedQuery(name = "Izdelek.getAllByIme", query = "SELECT o FROM izdelek o WHERE o.ime = :ime"),
-                @NamedQuery(name= "Izdelek.getCenaFromIme", query = "SELECT o.cena FROM izdelek o WHERE o.ime =:ime")
+                @NamedQuery(name= "Izdelek.getCenaFromIme", query = "SELECT o.cena FROM izdelek o WHERE o.ime =:ime"),
+                @NamedQuery(name="Izdelek.getKategorijaFromId",query="SELECT o.kategorija FROM izdelek o WHERE o.id=:id")
         })
 public class Izdelek {
 
