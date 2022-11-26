@@ -9,7 +9,9 @@ import java.util.List;
                 @NamedQuery(name = "Trgovina.getAll", query = "SELECT o FROM trgovina o"),
                 @NamedQuery(name = "Trgovina.getSeznamFromId",query = "SELECT o.seznamIzdelkov FROM trgovina o WHERE o.id =:id"),
                 @NamedQuery(name = "Trgovina.getIme", query = "SELECT o.ime FROM trgovina o"),
-                @NamedQuery(name = "Trgovina.getImeFromId",query = "SELECT o.ime FROM trgovina o WHERE o.id= :id")
+                @NamedQuery(name = "Trgovina.getImeFromId",query = "SELECT o.ime FROM trgovina o WHERE o.id= :id"),
+                @NamedQuery(name = "Trgovina.getSeznamFromIme",query = "SELECT o FROM trgovina o WHERE o.ime=:ime"),
+                @NamedQuery(name = "Trgovina.getTrgovinaFromIme",query = "SELECT o FROM trgovina o WHERE o.ime= :ime")
         })
 public class Trgovina {
 

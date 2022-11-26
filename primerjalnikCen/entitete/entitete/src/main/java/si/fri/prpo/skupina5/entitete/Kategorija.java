@@ -11,7 +11,7 @@ import java.util.List;
                 @NamedQuery(name = "Kategorija.getSeznamFromId",query = "SELECT o.seznamIzdelkov FROM kategorija o WHERE o.id =:id"),
                 @NamedQuery(name = "Kategorija.getAllByIme", query = "SELECT k FROM kategorija k WHERE k.ime = :ime"),
                 @NamedQuery(name = "Kategorija.getOpisFromIme", query = "SELECT k.opis FROM kategorija k WHERE k.ime = :ime"),
-                @NamedQuery(name = "Kategorija.getSeznamFromIme", query = "SELECT o.seznamIzdelkov FROM kategorija o WHERE o.ime=:ime")
+                @NamedQuery(name = "Kategorija.getSeznamFromIme", query = "SELECT o.seznamIzdelkov FROM kategorija o WHERE o.ime=:ime"),
         })
 public class Kategorija {
 
