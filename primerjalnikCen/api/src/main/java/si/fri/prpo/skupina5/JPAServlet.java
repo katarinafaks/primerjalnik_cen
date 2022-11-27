@@ -1,5 +1,7 @@
 package si.fri.prpo.skupina5;
 
+import si.fri.prpo.skupina5.dtos.IzdelekDto;
+import si.fri.prpo.skupina5.dtos.KosaricaDto;
 import si.fri.prpo.skupina5.entitete.Izdelek;
 import si.fri.prpo.skupina5.entitete.Kategorija;
 import si.fri.prpo.skupina5.entitete.Kosarica;
@@ -31,109 +33,94 @@ public class JPAServlet extends HttpServlet {
     @Inject
     private KosaricaZrno kosaricaZrno;
 
+    @Inject
+    private UpravljanjeKosariceZrno upravljanjeKosariceZrno;
+    @Inject
+    private UpravljanjeIzdelkovZrno upravljanjeIzdelkovZrno;
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-        //resp.getWriter().println("Hello");
-        //List<Trgovina> trgovine = izdelkiZrno.getTrgovina();
-        List<Izdelek> izdelki = izdelkiZrno.getIzdelki();
-        ListIterator<Izdelek> listIterator = izdelki.listIterator();
-        int i=0;
-        resp.getWriter().println("Izdelki:");
-        while(listIterator.hasNext()) {
-            Izdelek item = izdelki.get(i);
-            resp.getWriter().print(item.getIme() + ", ");
-            resp.getWriter().print(item.getOpis() + ", ");
-            resp.getWriter().print(item.getCena() + ", ");
-            resp.getWriter().print(item.getKategorija().getIme() + ", ");
-            resp.getWriter().print(item.getTrgovina().getIme() + ", ");
-            resp.getWriter().println(item.getKosarica().getIme());
-            listIterator.next();
-            i++;
-        }
-        List<Izdelek> izdelkiCriteria = izdelkiZrno.getAllIzdelkiWithCriteria();
-        i=0;
-        ListIterator<Izdelek> listIterator3 = izdelkiCriteria.listIterator();
-        resp.getWriter().println("Z Criteria API:");
-        while(listIterator3.hasNext()){
-            resp.getWriter().print(izdelkiCriteria.get(i).getIme()+", ");
-            resp.getWriter().print(izdelkiCriteria.get(i).getOpis() + ", ");
-            resp.getWriter().print(izdelkiCriteria.get(i).getKategorija().getIme() + ", ");
-            resp.getWriter().print(izdelkiCriteria.get(i).getTrgovina().getIme() + ", ");
-            resp.getWriter().println(izdelkiCriteria.get(i).getKosarica().getIme());
-            i++;
-            listIterator3.next();
-        }
 
-        List<Trgovina> trgovine = trgovinaZrno.getTrgovine();
-        ListIterator<Trgovina> listIterator2 = trgovine.listIterator();
-        i=0;
-        resp.getWriter().println("Trgovine:");
-        while(listIterator2.hasNext()){
-            resp.getWriter().println(trgovine.get(i).getIme());
-            //resp.getWriter().println(trgovine.get(i).getSeznamIzdelkov().get(i).getIme());
-            i++;
-            listIterator2.next();
-        }
-        List<Trgovina> trgovineCAPI = trgovinaZrno.getAllTrgovineWithCriteria();
-        ListIterator<Trgovina> listIteratorTAPI = trgovineCAPI.listIterator();
-        i=0;
-        resp.getWriter().println("Trgovine z CriteriaAPI:");
-        while(listIteratorTAPI.hasNext()){
-            resp.getWriter().println(trgovineCAPI.get(i).getIme());
-            //resp.getWriter().println(trgovine.get(i).getSeznamIzdelkov().get(i).getIme());
-            i++;
-            listIteratorTAPI.next();
-        }
-
-        List<Kategorija> kategorije = kategorijaZrno.getKategorije();
-        ListIterator<Kategorija> listIterator4 = kategorije.listIterator();
-        i=0;
-        resp.getWriter().println("Kategorije:");
-        while(listIterator4.hasNext()){
-            resp.getWriter().print(kategorije.get(i).getIme()+", ");
-            resp.getWriter().println(kategorije.get(i).getOpis());
-           // resp.getWriter().println(kategorije.get(i).getSeznamIzdelkov());
-            i++;
-            listIterator4.next();
-        }
-        List<Kategorija> kategorijeCAPI = kategorijaZrno.getAllKategorijeWithCriteria();
-        ListIterator<Kategorija> listIteratorKAPI = kategorijeCAPI.listIterator();
-        i=0;
-        resp.getWriter().println("Kategorije s C api:");
-        while(listIteratorKAPI.hasNext()){
-            resp.getWriter().print(kategorijeCAPI.get(i).getIme()+", ");
-            resp.getWriter().println(kategorijeCAPI.get(i).getOpis());
-            // resp.getWriter().println(kategorije.get(i).getSeznamIzdelkov());
-            i++;
-            listIteratorKAPI.next();
-        }
+        Trgovina t=trgovinaZrno.getTrgovinaById(1);
+        List<Izdelek> izdelki=t.getSeznamIzdelkov();
 
 
+        resp.getWriter().println("Trgovina pridobljena po imenu:");
+        Trgovina trgovina=trgovinaZrno.getTrgovinaFromIme("Lidl");
+        resp.getWriter().println(trgovina.getIme());
 
-        List<Kosarica> kosarice = kosaricaZrno.getKosarice();
-        ListIterator<Kosarica> listIterator5 = kosarice.listIterator();
-        resp.getWriter().println("Kosarice:");
-        i=0;
-        while(listIterator5.hasNext()){
-            resp.getWriter().println(kosarice.get(i).getIme());
-            //resp.getWriter().println(kosarice.get(i).getIzdelki());
-            i++;
-            listIterator5.next();
+        Kosarica kos=kosaricaZrno.getKosaricaById(1);
+        resp.getWriter().println("Elementi kosarice " + kos.getIme());
+        for(Izdelek i:kos.getIzdelki()){
+            resp.getWriter().println(i.getIme() + " cena: " + i.getCena());
         }
-        List<Kosarica> kosariceAPI = kosaricaZrno.getAllKosariceWithCriteria();
-        ListIterator<Kosarica> listIteratorAPI = kosariceAPI.listIterator();
-        resp.getWriter().println("Kosarice s Criteria API:");
-        i=0;
-        while(listIteratorAPI.hasNext()){
-            resp.getWriter().println(kosariceAPI.get(i).getIme());
-            //resp.getWriter().println(kosarice.get(i).getIzdelki());
-            i++;
-            listIteratorAPI.next();
+        KosaricaDto kosDto=new KosaricaDto();
+        kosDto.setIzdelki(izdelki);
+        kosDto.setTrgovina(t);
+        resp.getWriter().println("Preverjamo kosarico, ce sploh lahko izracunamo ceno");
+        boolean x=upravljanjeKosariceZrno.preveriKosarico(kosDto);
+        if(x){
+            resp.getWriter().println("Skupna cena kosarice " + kos.getIme());
+            int cena=upravljanjeKosariceZrno.IzracunajCenoKosariceByTrg(kos,t.getId());
+            resp.getWriter().println(cena);
+        }else{
+            resp.getWriter().println("Ni vrei");
+        }
+        Kosarica prej=kosaricaZrno.getKosaricaById(1);
+        resp.getWriter().println("V Prva kosarica:");
+        List<Izdelek> ss1=prej.getIzdelki();
+        for(Izdelek ii:ss1){
+            resp.getWriter().println(ii.getIme());
         }
 
+        Izdelek i=izdelkiZrno.getIzdelekById(1);
+        Kosarica nova=upravljanjeKosariceZrno.dodajIzdelekVKosarico(1,i.getId());
+        resp.getWriter().println("V Prvi Kosarico sem dodala izdelek z id=1");
+        List<Izdelek> ss=nova.getIzdelki();
+        for(Izdelek ii:ss){
+            resp.getWriter().println(ii.getIme());
+        }
 
+        Kategorija k =kategorijaZrno.getKategorijaFromIme("Pisala");
+        resp.getWriter().println("Izracunano st elementov in povprecje kategorije " + k.getIme());
+        for(Izdelek izdelek:k.getSeznamIzdelkov()){
+            resp.getWriter().println(izdelek.getIme() + ", cena: " + izdelek.getCena());
+        }
+        List<Integer> stIzdInAverage=upravljanjeIzdelkovZrno.stIzdelkovInPovprecjeKategorije(k.getId());
+        resp.getWriter().print("Stevilo elementov : " + stIzdInAverage.get(0) + ", ");
+        resp.getWriter().println(" Povprecje elementov kategorije:" + stIzdInAverage.get(1));
+
+        //resp.getWriter().println(k.getOpis());
+        //resp.getWriter().println(k.getIme());
+        //resp.getWriter().println(k.getId());
+
+
+        IzdelekDto izdelekDto=new IzdelekDto();
+        izdelekDto.setImeIzdelka("Sir");
+        izdelekDto.setOpisIzdelka("Hrana iz krave");
+        izdelekDto.setCena(7);
+        izdelekDto.setImeKategorije("Mlecni izdelki");
+        izdelekDto.setImeTrgovine("Merkator");
+        Izdelek izdto=upravljanjeIzdelkovZrno.ustvariIzdelekVTrgovinoInKategorijo(izdelekDto);
+        List<Izdelek> xx=trgovinaZrno.getTrgovinaSeznamFromIme("Merkator");
+        //List<Izdelek> xx=izdto.getTrgovina().getSeznamIzdelkov();
+
+        Kosarica kosarica=upravljanjeKosariceZrno.dodajIzdelekVKosarico(1,izdto.getId());
+        resp.getWriter().println("Elementi kosarice 1: " + kosarica.getIme());
+        for(Izdelek el:kosarica.getIzdelki()){
+            resp.getWriter().println(el.getIme());
+        }
+        resp.getWriter().println("Dodan nov izdelek v trgovino Merkator:");
+        for(Izdelek el :xx){
+            resp.getWriter().println(el.getIme());
+        }
+
+        Kosarica kosarica1=upravljanjeKosariceZrno.odstraniIzdelekizKosarice(1,izdto.getId());
+        resp.getWriter().println("Elementi kosarice 1 po odstranitvi: " + izdto.getIme());
+        for(Izdelek el:kosarica1.getIzdelki()){
+            resp.getWriter().println(el.getIme());
+        }
 
     }
 }
