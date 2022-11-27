@@ -5,12 +5,15 @@ import si.fri.prpo.skupina5.entitete.Izdelek;
 import si.fri.prpo.skupina5.entitete.Kategorija;
 import si.fri.prpo.skupina5.entitete.Trgovina;
 
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import java.util.logging.Logger;
 
 @ApplicationScoped
@@ -24,12 +27,33 @@ public class UpravljanjeIzdelkovZrno {
     @Inject
     TrgovinaZrno trgovinaZrno;
 
+
+    @Inject
+    IzdelkiZrno izdelkiZrno;
+
     @PersistenceContext(unitName = "primerjalnik-cen-jpa")
     private EntityManager em;
 
     private Logger log = Logger.getLogger(KosaricaZrno.class.getName());
 
+    private String idZrna;
 
+    @PostConstruct
+    private void init() {
+
+        idZrna = UUID.randomUUID().toString();
+
+        log.info("Inicializacija zrna " + UpravljanjeIzdelkovZrno.class.getSimpleName() + " z ID: " + idZrna);
+
+        // Initialize sources
+    }
+
+    @PreDestroy
+    private void destroy() {
+        log.info("Deinicializacija zrna " + UpravljanjeIzdelkovZrno.class.getSimpleName() + " z ID: " + idZrna);
+
+        // Deinitialize sources
+    }
 
     public List<Integer> stIzdelkovInPovprecjeKategorije(int kategorijaId){
 
@@ -76,7 +100,8 @@ public class UpravljanjeIzdelkovZrno {
         Trgovina t=trgovinaZrno.getTrgovinaFromIme(izdelekDto.getImeTrgovine());
         seznamTrgovine.add(i);
         i.setTrgovina(t);
-
+        izdelkiZrno.dodajIzdelek(i);
+        log.info("Dodan je izdelek " + i.getIme());
         return i;
     }
 

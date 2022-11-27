@@ -8,6 +8,7 @@ import si.fri.prpo.skupina5.entitete.Trgovina;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.context.RequestScoped;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
@@ -17,6 +18,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.UUID;
 import java.util.logging.Logger;
 
 @ApplicationScoped
@@ -26,16 +28,19 @@ public class TrgovinaZrno {
     private EntityManager em;
     private Logger log = Logger.getLogger(TrgovinaZrno.class.getName());
 
+    private String idZrna;
+
     @PostConstruct
     private void init(){
-        log.info("inicializacija zrna "+ TrgovinaZrno.class.getSimpleName());
+        idZrna = UUID.randomUUID().toString();
+        log.info("inicializacija zrna "+ TrgovinaZrno.class.getSimpleName() + " z ID " + idZrna);
 
         //inicializacija virov
     }
 
     @PreDestroy
     private void destroy(){
-        log.info("deinicializacija zrna "+ TrgovinaZrno.class.getSimpleName());
+        log.info("deinicializacija zrna "+ TrgovinaZrno.class.getSimpleName()+ " z ID " + idZrna);
 
         //zapiranje virov
     }
@@ -65,7 +70,8 @@ public class TrgovinaZrno {
     }
 
     public Trgovina getTrgovinaFromIme(String ime){
-        Trgovina trg=em.find(Trgovina.class,ime);
+
+
         Trgovina a=null;
         try{
             Object t=em.createNamedQuery("Trgovina.getTrgovinaFromIme").setParameter("ime",ime).getSingleResult();
@@ -75,6 +81,7 @@ public class TrgovinaZrno {
         }
 
         return a;
+
     }
 
     //implementacija se ostalih CRUD operacij

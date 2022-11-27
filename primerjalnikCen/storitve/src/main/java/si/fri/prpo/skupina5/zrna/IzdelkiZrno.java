@@ -6,6 +6,7 @@ import si.fri.prpo.skupina5.entitete.Trgovina;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.context.RequestScoped;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
@@ -14,6 +15,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.UUID;
 import java.util.logging.Logger;
 
 @ApplicationScoped
@@ -25,16 +27,21 @@ public class IzdelkiZrno {
 
     private Logger log = Logger.getLogger(IzdelkiZrno.class.getName());
 
+
+    private String idZrna;
+
     @PostConstruct
     private void init(){
-        log.info("inicializacija zrna "+ IzdelkiZrno.class.getSimpleName());
+
+        idZrna = UUID.randomUUID().toString();
+        log.info("inicializacija zrna "+ IzdelkiZrno.class.getSimpleName()+ " z ID: " + idZrna);
 
         //inicializacija virov
     }
 
     @PreDestroy
     private void destroy(){
-        log.info("deinicializacija zrna "+ IzdelkiZrno.class.getSimpleName());
+        log.info("deinicializacija zrna "+ IzdelkiZrno.class.getSimpleName()+ " z ID: " + idZrna);
 
         //zapiranje virov
     }

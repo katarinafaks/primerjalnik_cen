@@ -7,6 +7,8 @@ import si.fri.prpo.skupina5.entitete.Izdelek;
 import si.fri.prpo.skupina5.entitete.Kosarica;
 import si.fri.prpo.skupina5.entitete.Trgovina;
 
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
@@ -14,6 +16,7 @@ import javax.persistence.PersistenceContext;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.UUID;
 import java.util.logging.Logger;
 
 @ApplicationScoped
@@ -23,6 +26,26 @@ public class UpravljanjeKosariceZrno {
 
     @PersistenceContext(unitName = "primerjalnik-cen-jpa")
     private EntityManager em;
+
+    private String idZrna;
+
+    @PostConstruct
+    private void init() {
+
+        idZrna = UUID.randomUUID().toString();
+
+        log.info("Inicializacija zrna " + UpravljanjeKosariceZrno.class.getSimpleName() + " z ID: " + idZrna);
+
+        // Initialize sources
+    }
+
+    @PreDestroy
+    private void destroy() {
+        log.info("Deinicializacija zrna " + UpravljanjeKosariceZrno.class.getSimpleName() + " z ID: " + idZrna);
+
+        // Deinitialize sources
+    }
+
 
     @Inject
     KosaricaZrno kosaricaZrno;
@@ -73,6 +96,10 @@ public class UpravljanjeKosariceZrno {
 
     public boolean trgovinaImaIzdelek(int trgovinaId,Izdelek i){
         List<Izdelek> izdelkiTrgovine=pridobiIzdelkeTrgovine(trgovinaId);
+        if(izdelkiTrgovine.isEmpty()|| izdelkiTrgovine==null){
+            log.info("Trgovina nima izdelkov");
+            return false;
+        }
         ListIterator<Izdelek> trg=izdelkiTrgovine.listIterator();
         int j=0;
         boolean izdelekObstaja=false;
@@ -101,33 +128,34 @@ public class UpravljanjeKosariceZrno {
         kosaricaZrno.posodobiKosarico(kosaricaId,k);
         i.setKosarica(k);
         izdelkiZrno.posodobiIzdelek(izdelekId,i);
+        log.info("V kosarico " + k.getIme() + "je dodan izdelek " + i.getIme());
         return k;
     }
 
-    //vrne id izdelka, ki smo ga izbrisali iz Kosarice
-    public Integer odstraniIzdelekizKosarice(int kosaricaId, int izdelekId){
+    //vrne kosarico
+    public Kosarica odstraniIzdelekizKosarice(int kosaricaId, int izdelekId){
         Kosarica k=kosaricaZrno.getKosaricaById(kosaricaId);
         List<Izdelek> novaKosarica=new ArrayList<Izdelek>();
         log.info("Stari seznam" + k.getIzdelki());
 
         for(Izdelek izdelek:k.getIzdelki()){
-            log.info("Gledamo izdelek"+izdelek.getIme());
+            log.info("Gledamo izdelek "+izdelek.getIme());
             if(izdelek.getId()!=izdelekId)
                 novaKosarica.add(izdelek);
         }
         k.setIzdelki(novaKosarica);
-        log.info("Novi seznam" + k.getIzdelki());
+        log.info("Novi seznam " + k.getIzdelki());
         kosaricaZrno.posodobiKosarico(kosaricaId,k);
         izdelkiZrno.izbrisiIzdelek(izdelekId);
 
-        return izdelekId;
+        return k;
     }
 
 
     public boolean preveriKosarico(KosaricaDto kosaricaDto){
 
         List<Izdelek> zeljeniIzdelki=kosaricaDto.getIzdelki();
-        if(zeljeniIzdelki.isEmpty()){
+        if(zeljeniIzdelki.isEmpty() || zeljeniIzdelki==null){
             log.info("Ni podanih izdelkov");
             return false;
         }

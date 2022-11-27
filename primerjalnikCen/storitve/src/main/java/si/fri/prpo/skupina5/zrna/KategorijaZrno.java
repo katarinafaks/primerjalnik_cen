@@ -17,6 +17,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.UUID;
 import java.util.logging.Logger;
 
 @ApplicationScoped
@@ -27,19 +28,25 @@ public class KategorijaZrno {
 
     private Logger log = Logger.getLogger(KategorijaZrno.class.getName());
 
-    @PostConstruct
-    private void init(){
-        log.info("inicializacija zrna "+ KategorijaZrno.class.getSimpleName());
+    private String idZrna;
 
-        //inicializacija virov
+    @PostConstruct
+    private void init() {
+
+        idZrna = UUID.randomUUID().toString();
+
+        log.info("Inicializacija zrna " + KategorijaZrno.class.getSimpleName() + " z ID: " + idZrna);
+
+        // Initialize sources
     }
 
     @PreDestroy
-    private void destroy(){
-        log.info("deinicializacija zrna "+ KategorijaZrno.class.getSimpleName());
+    private void destroy() {
+        log.info("Deinicializacija zrna " + KategorijaZrno.class.getSimpleName() + " z ID: " + idZrna);
 
-        //zapiranje virov
+        // Deinitialize sources
     }
+
 
 
 
