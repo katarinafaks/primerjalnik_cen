@@ -1,8 +1,11 @@
 package si.fri.prpo.skupina5.api.v1.viri;
 
 
+import si.fri.prpo.skupina5.dtos.IzdelekDto;
+import si.fri.prpo.skupina5.dtos.KosaricaDto;
 import si.fri.prpo.skupina5.entitete.Kosarica;
 import si.fri.prpo.skupina5.zrna.KosaricaZrno;
+import si.fri.prpo.skupina5.zrna.UpravljanjeKosariceZrno;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -18,7 +21,10 @@ public class KosaricaVir {
 
 
     @Inject
-    KosaricaZrno kosaricaZrno;
+    private KosaricaZrno kosaricaZrno;
+
+    @Inject
+    private UpravljanjeKosariceZrno upravljanjeKosariceZrno;
 
     @Path("{id}")
     public Response vrniKosarico(@PathParam("id") Integer id){
@@ -44,5 +50,35 @@ public class KosaricaVir {
     @Path("{id}")
     public Response posodobiKosarico(@PathParam("id") Integer id, Kosarica kosarica){
         return Response.status(Response.Status.CREATED).entity(kosaricaZrno.posodobiKosarico(id,kosarica)).build();
+    }
+
+
+    @GET
+    public Response preveriKosarico(KosaricaDto kosaricaDto){
+        return Response.status(Response.Status.OK).entity(upravljanjeKosariceZrno.preveriKosarico(kosaricaDto)).build();
+    }
+
+    @GET
+    @Path("/trgovina/{TrgovinaId}")
+    public Response cenaKosarice(@PathParam("TrgovinaId") Integer TrgovinaId,Kosarica kosarica){
+        int cena=upravljanjeKosariceZrno.IzracunajCenoKosariceByTrg(kosarica,TrgovinaId);
+        return Response.status(Response.Status.OK).entity(cena).build();
+    }
+
+    @POST //AL PA @PUT IDK
+    @Path("{id}/izdelek/{IzdelekId}")
+    public Response dodajIzdelekVKosarico(@PathParam("IzdelekId") Integer IzdelekId,@PathParam("id") Integer id){
+        Kosarica kosarica=upravljanjeKosariceZrno.dodajIzdelekVKosarico(id,IzdelekId);
+        if(kosarica==null){
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+        return Response.status(Response.Status.CREATED).entity(kosarica).build();
+    }
+
+    @POST //AL PA @PUT IDK
+    @Path("{id}/izdelek/{IzdelekId}")
+    public Response odstraniIzdelekIzKosarice(@PathParam("IzdelekId") Integer IzdelekId,@PathParam("id") Integer id){
+        Kosarica kosarica=upravljanjeKosariceZrno.odstraniIzdelekizKosarice(id,IzdelekId);
+        return Response.status(Response.Status.CREATED).entity(kosarica).build();
     }
 }

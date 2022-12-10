@@ -1,9 +1,11 @@
 package si.fri.prpo.skupina5.api.v1.viri;
 
 
+import si.fri.prpo.skupina5.entitete.Izdelek;
 import si.fri.prpo.skupina5.entitete.Trgovina;
 import si.fri.prpo.skupina5.zrna.IzdelkiZrno;
 import si.fri.prpo.skupina5.zrna.TrgovinaZrno;
+import si.fri.prpo.skupina5.zrna.UpravljanjeKosariceZrno;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -20,6 +22,9 @@ public class TrgovinaVir {
 
     @Inject
     private TrgovinaZrno trgovinaZrno;
+
+    @Inject
+    private UpravljanjeKosariceZrno upravljanjeKosariceZrno;
 
     @GET
     @Path("{id}")
@@ -47,5 +52,13 @@ public class TrgovinaVir {
     public Response posodobiTrgovino(@PathParam("id") Integer id, Trgovina trgovina){
         return Response.status(Response.Status.CREATED).entity(trgovinaZrno.posodobiTrgovino(id,trgovina)).build();
     }
+
+    @GET
+    @Path("{id}")
+    public Response trgovinaImaIzdelek(@PathParam("id") Integer id, Izdelek i){
+
+        return Response.status(Response.Status.OK).entity(upravljanjeKosariceZrno.trgovinaImaIzdelek(id,i)).build();
+    }
+
 
 }

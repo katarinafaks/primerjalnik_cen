@@ -3,10 +3,12 @@ package si.fri.prpo.skupina5.api.v1.viri;
 
 
 
+import si.fri.prpo.skupina5.dtos.IzdelekDto;
 import si.fri.prpo.skupina5.entitete.Izdelek;
 
 import com.kumuluz.ee.rest.beans.QueryParameters;
 import si.fri.prpo.skupina5.zrna.IzdelkiZrno;
+import si.fri.prpo.skupina5.zrna.UpravljanjeIzdelkovZrno;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -30,6 +32,8 @@ public class IzdelkiVir {
     @Inject
     private IzdelkiZrno izdelkiZrno;
 
+    @Inject
+    private UpravljanjeIzdelkovZrno upravljanjeIzdelkovZrno;
 
 
     @GET
@@ -68,5 +72,16 @@ public class IzdelkiVir {
     public Response posodobiIzdelek(@PathParam("id") Integer id, Izdelek izdelek){
         return Response.status(Response.Status.CREATED).entity(izdelkiZrno.posodobiIzdelek(id,izdelek)).build();
     }
+
+    @POST
+    public Response ustvariIzdelekVTrgovinoInKategorijo(IzdelekDto izdelekDto){
+        Izdelek izdelek= upravljanjeIzdelkovZrno.ustvariIzdelekVTrgovinoInKategorijo(izdelekDto);
+        if(izdelek==null){
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+        return Response.status(Response.Status.CREATED).entity(izdelek).build();
+    }
+
+
 
 }
