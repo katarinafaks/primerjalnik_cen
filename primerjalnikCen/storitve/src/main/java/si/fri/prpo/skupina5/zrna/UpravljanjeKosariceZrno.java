@@ -117,10 +117,12 @@ public class UpravljanjeKosariceZrno {
         Izdelek i=izdelkiZrno.getIzdelekById(izdelekId);
         if(i == null){
             log.info("Izdelek ne obstaja");
+            return null;
         }
         Kosarica k =kosaricaZrno.getKosaricaById(kosaricaId);
         if(k==null){
             log.info("Kosarica ne obstaja");
+            return null;
         }
         List<Izdelek>seznam=k.getIzdelki();
         seznam.add(i);

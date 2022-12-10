@@ -22,14 +22,14 @@ public class UpravljanjeIzdelkovZrno {
 
 
     @Inject
-    KategorijaZrno kategorijaZrno;
+    private KategorijaZrno kategorijaZrno;
 
     @Inject
-    TrgovinaZrno trgovinaZrno;
+    private TrgovinaZrno trgovinaZrno;
 
 
     @Inject
-    IzdelkiZrno izdelkiZrno;
+    private IzdelkiZrno izdelkiZrno;
 
     @PersistenceContext(unitName = "primerjalnik-cen-jpa")
     private EntityManager em;
