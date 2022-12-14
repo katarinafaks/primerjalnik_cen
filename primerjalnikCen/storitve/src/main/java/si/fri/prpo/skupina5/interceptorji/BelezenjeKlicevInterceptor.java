@@ -28,7 +28,7 @@ public class BelezenjeKlicevInterceptor {
         steviloKlicev++;
 
         log.info("Metoda: "+ ctx.getMethod().getName() + "v Razredu: "+
-                ctx.getMethod().getDeclaringClass().getName() + "klici: " + steviloKlicev);
+                ctx.getMethod().getDeclaringClass().getName() + " Klici: " + steviloKlicev);
         try{
             Object x=ctx.proceed();
             return x;

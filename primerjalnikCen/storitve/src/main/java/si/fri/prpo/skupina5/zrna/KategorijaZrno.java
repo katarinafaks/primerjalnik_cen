@@ -1,6 +1,8 @@
 package si.fri.prpo.skupina5.zrna;
 
 
+import com.kumuluz.ee.rest.beans.QueryParameters;
+import com.kumuluz.ee.rest.utils.JPAUtils;
 import si.fri.prpo.skupina5.entitete.Izdelek;
 import si.fri.prpo.skupina5.entitete.Kategorija;
 import si.fri.prpo.skupina5.entitete.Trgovina;
@@ -57,6 +59,15 @@ public class KategorijaZrno {
 
         return kategorije;
     }
+
+    public List<Kategorija> getKategorije(QueryParameters query){
+        return JPAUtils.queryEntities(em,Kategorija.class,query);
+    }
+    public Long getKategorijaCount(QueryParameters query) {
+        Long count = JPAUtils.queryEntitiesCount(em, Kategorija.class, query);
+        return count;
+    }
+
     public List<Kategorija> getAllKategorijeWithCriteria(){
 
         CriteriaBuilder cb = em.getCriteriaBuilder();

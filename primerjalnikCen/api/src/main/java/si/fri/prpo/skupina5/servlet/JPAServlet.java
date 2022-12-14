@@ -14,6 +14,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.ws.rs.GET;
 import java.io.IOException;
 import java.util.List;
 import java.util.ListIterator;
@@ -42,6 +43,8 @@ public class JPAServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
 
+
+
         Trgovina t=trgovinaZrno.getTrgovinaById(1);
         List<Izdelek> izdelki=t.getSeznamIzdelkov();
 
@@ -63,6 +66,7 @@ public class JPAServlet extends HttpServlet {
         if(x){
             resp.getWriter().println("Skupna cena kosarice " + kos.getIme());
             int cena=upravljanjeKosariceZrno.IzracunajCenoKosariceByTrg(kos,t.getId());
+            //  int cenaSeEnkrat=upravljanjeKosariceZrno.IzracunajCenoKosariceByTrg(kos,t.getId());
             resp.getWriter().println(cena);
         }else{
             resp.getWriter().println("Ni vrei");

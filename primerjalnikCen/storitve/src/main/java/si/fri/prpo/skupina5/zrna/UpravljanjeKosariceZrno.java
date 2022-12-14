@@ -1,6 +1,9 @@
 package si.fri.prpo.skupina5.zrna;
 
 
+import com.kumuluz.ee.rest.beans.QueryParameters;
+import com.kumuluz.ee.rest.utils.JPAUtils;
+import si.fri.prpo.skupina5.anotacije.BeleziKlice;
 import si.fri.prpo.skupina5.dtos.KosaricaDto;
 import si.fri.prpo.skupina5.dtos.TrgovinaDto;
 import si.fri.prpo.skupina5.entitete.Izdelek;
@@ -56,6 +59,7 @@ public class UpravljanjeKosariceZrno {
     @Inject
     IzdelkiZrno izdelkiZrno;
 
+    @BeleziKlice
     public int IzracunajCenoKosariceByTrg(Kosarica k,int trgovinaId){
         List<Izdelek> izdelkiKosarice=k.getIzdelki();
         ListIterator<Izdelek> listIterator = izdelkiKosarice.listIterator();
@@ -89,10 +93,13 @@ public class UpravljanjeKosariceZrno {
     }
 
 
+
     public List<Izdelek> pridobiIzdelkeTrgovine(int trgovinaId){
 
        return em.createNamedQuery("Trgovina.getSeznamFromId").setParameter("id",trgovinaId).getResultList();
     }
+
+
 
     public boolean trgovinaImaIzdelek(int trgovinaId,Izdelek i){
         List<Izdelek> izdelkiTrgovine=pridobiIzdelkeTrgovine(trgovinaId);
@@ -113,6 +120,7 @@ public class UpravljanjeKosariceZrno {
         return izdelekObstaja;
     }
 
+    @BeleziKlice
     public Kosarica dodajIzdelekVKosarico(int kosaricaId,int izdelekId){
         Izdelek i=izdelkiZrno.getIzdelekById(izdelekId);
         if(i == null){
@@ -154,6 +162,7 @@ public class UpravljanjeKosariceZrno {
     }
 
 
+    @BeleziKlice
     public boolean preveriKosarico(KosaricaDto kosaricaDto){
 
         List<Izdelek> zeljeniIzdelki=kosaricaDto.getIzdelki();

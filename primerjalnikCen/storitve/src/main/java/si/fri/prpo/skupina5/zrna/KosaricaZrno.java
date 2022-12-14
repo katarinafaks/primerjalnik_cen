@@ -1,5 +1,8 @@
 package si.fri.prpo.skupina5.zrna;
 
+import com.kumuluz.ee.rest.beans.QueryParameters;
+import com.kumuluz.ee.rest.utils.JPAUtils;
+import si.fri.prpo.skupina5.entitete.Izdelek;
 import si.fri.prpo.skupina5.entitete.Kategorija;
 import si.fri.prpo.skupina5.entitete.Kosarica;
 
@@ -51,6 +54,15 @@ public class KosaricaZrno {
         List<Kosarica> kosarice=em.createNamedQuery("Kosarica.getAll").getResultList();
 
         return kosarice;
+    }
+
+    public List<Kosarica> getKosarice(QueryParameters query){
+        return JPAUtils.queryEntities(em,Kosarica.class,query);
+    }
+
+    public Long getKosaricaCount(QueryParameters query) {
+        Long count = JPAUtils.queryEntitiesCount(em, Kosarica.class, query);
+        return count;
     }
 
     public List<Kosarica> getAllKosariceWithCriteria(){

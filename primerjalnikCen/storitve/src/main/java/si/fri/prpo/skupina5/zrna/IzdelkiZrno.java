@@ -1,5 +1,7 @@
 package si.fri.prpo.skupina5.zrna;
 
+import com.kumuluz.ee.rest.beans.QueryParameters;
+import com.kumuluz.ee.rest.utils.JPAUtils;
 import si.fri.prpo.skupina5.entitete.Izdelek;
 import si.fri.prpo.skupina5.entitete.Trgovina;
 
@@ -54,11 +56,21 @@ public class IzdelkiZrno {
 
         return izdelki;
     }
-    public List<Trgovina> getTrgovina() {
 
-        List<Trgovina> t=em.createNamedQuery("Izdelek.getTrgovina").getResultList();
+    public List<Izdelek> getIzdelki(QueryParameters query){
+        return JPAUtils.queryEntities(em, Izdelek.class,query);
+    }
 
+    public Trgovina getTrgovina() {
+
+        Trgovina t=(Trgovina) em.createNamedQuery("Izdelek.getTrgovina").getSingleResult();
+        //prej sem pa vracala List<Trgovina> pa: List<Trgovina> t= em.crea.....).getListResult();
         return t;
+    }
+
+    public Long getIzdelkiCount(QueryParameters query) {
+        Long count = JPAUtils.queryEntitiesCount(em, Izdelek.class, query);
+        return count;
     }
 
     public List<Izdelek> getAllIzdelkiWithCriteria(){

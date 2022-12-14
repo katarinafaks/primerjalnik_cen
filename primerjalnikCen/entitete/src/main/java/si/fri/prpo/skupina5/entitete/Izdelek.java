@@ -1,13 +1,18 @@
 package si.fri.prpo.skupina5.entitete;
+
+
+import javax.json.bind.annotation.JsonbTransient;
 import javax.persistence.*;
 
 @Entity(name = "izdelek")
 @NamedQueries(value =
         {
                 @NamedQuery(name = "Izdelek.getAll", query = "SELECT o FROM izdelek o"),
-                @NamedQuery(name = "Izdelek.getByIme", query = "SELECT o FROM izdelek o WHERE o.ime = :ime"),
                 @NamedQuery(name = "Izdelek.getAllfromId",query="SELECT o FROM izdelek o WHERE o.id = :id"),
-                @NamedQuery(name= "Izdelek.getTrgovina",query = "SELECT o.trgovina FROM izdelek o")
+                @NamedQuery(name= "Izdelek.getTrgovina",query = "SELECT o.trgovina FROM izdelek o"),
+                @NamedQuery(name = "Izdelek.getAllByIme", query = "SELECT o FROM izdelek o WHERE o.ime = :ime"),
+                @NamedQuery(name= "Izdelek.getCenaFromIme", query = "SELECT o.cena FROM izdelek o WHERE o.ime =:ime"),
+                @NamedQuery(name="Izdelek.getKategorijaFromId",query="SELECT o.kategorija FROM izdelek o WHERE o.id=:id")
         })
 public class Izdelek {
 
@@ -21,28 +26,34 @@ public class Izdelek {
 
     private Integer cena;
 
-
-    @ManyToOne
-    @JoinColumn(name = "kategorija_id")
-    private Kategorija kategorija;
-
+    @JsonbTransient
     @ManyToOne
     @JoinColumn(name = "kosarica_id")
     private Kosarica kosarica;
 
+    @JsonbTransient
+    @ManyToOne
+    @JoinColumn(name = "kategorija_id")
+    private Kategorija kategorija;
+
+    @JsonbTransient
     @ManyToOne
     @JoinColumn(name="trgovina_id")
     private Trgovina trgovina;
 
-    // getter in setter metode
 
     public Kosarica getKosarica() { return kosarica; }
 
     public void setKosarica(Kosarica kosarica) { this.kosarica = kosarica;}
 
-    public Trgovina getTrgovina() { return trgovina;}
+    public Trgovina getTrgovina() {
+        return trgovina;
+    }
 
-    public void setTrgovina(Trgovina trgovina) { this.trgovina = trgovina; }
+    public void setTrgovina(Trgovina trgovina) {
+        this.trgovina = trgovina;
+    }
+// getter in setter metode
 
     public Kategorija getKategorija() {
         return kategorija;
@@ -84,5 +95,5 @@ public class Izdelek {
         this.id = id;
     }
 
-}
 
+}
