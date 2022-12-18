@@ -65,6 +65,9 @@ public class UpravljanjeKosariceZrno {
         ListIterator<Izdelek> listIterator = izdelkiKosarice.listIterator();
         int cena=0;
         int i=0;
+        if(izdelkiKosarice.isEmpty()){
+            throw new NeveljavnaKosaricaException("Kosarica je prazna.");
+        }
         while(listIterator.hasNext()){
             String ime=izdelkiKosarice.get(i).getIme();
 
