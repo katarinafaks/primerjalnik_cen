@@ -1,8 +1,5 @@
 package si.fri.prpo.skupina5.api.v1.viri;
 
-
-
-
 import com.kumuluz.ee.rest.utils.JPAUtils;
 import org.eclipse.microprofile.openapi.annotations.Operation;
 import org.eclipse.microprofile.openapi.annotations.media.Content;
@@ -13,6 +10,7 @@ import si.fri.prpo.skupina5.dtos.IzdelekDto;
 import si.fri.prpo.skupina5.entitete.Izdelek;
 
 import com.kumuluz.ee.rest.beans.QueryParameters;
+import si.fri.prpo.skupina5.entitete.Kategorija;
 import si.fri.prpo.skupina5.zrna.IzdelkiZrno;
 import si.fri.prpo.skupina5.zrna.UpravljanjeIzdelkovZrno;
 
@@ -51,7 +49,7 @@ public class IzdelkiVir {
             summary = "Pridobi izdelke",description = "Vrne seznam vseh izdelkov"
     )
     @APIResponses({
-            @APIResponse(description = "Vrne vse izdelke", responseCode = "200",
+            @APIResponse(description = "Seznam izdelkov", responseCode = "200",
                     content = @Content(schema = @Schema(implementation = Izdelek.class)))
     })
     @Path("/getAll")
@@ -70,7 +68,7 @@ public class IzdelkiVir {
             summary = "Pridobi izdelek",description = "Vrne izdelek s podanim id-jem"
     )
     @APIResponses({
-            @APIResponse(description = "Pridobi izdelek", responseCode = "200",
+            @APIResponse(description = "Vrnjen izdelek", responseCode = "200",
                     content = @Content(schema = @Schema(implementation = Izdelek.class))),
             @APIResponse(description = "Izdelka s tem id-jem ne najde",responseCode = "404")
     })
@@ -89,7 +87,7 @@ public class IzdelkiVir {
             summary = "Doda izdelek",description = "Doda nov izdelek s podanimi parametri"
     )
     @APIResponses({
-            @APIResponse(description = "Doda izdelek", responseCode = "200",
+            @APIResponse(description = "Izdelek je dodan", responseCode = "201",
                     content = @Content(schema = @Schema(implementation = Izdelek.class)))
     })
     @Path("/dodajIzdelek")
@@ -99,19 +97,42 @@ public class IzdelkiVir {
     }
 
     @DELETE
+    @Operation(
+            summary = "Odstrani izdelek",description = "Odstrani izdelek s podanim id"
+    )
+    @APIResponses({
+            @APIResponse(description = "Izdelek je odstranjen", responseCode = "204",
+                    content = @Content(schema = @Schema(implementation = Izdelek.class))),
+            @APIResponse(description = "Izdelka s tem id-jem ne najde",responseCode = "404")
+    })
     @Path("/odstraniIzdelek/{id}")
     public Response odstraniIzdelek(@PathParam("id") Integer id){
         return Response.status(Response.Status.OK).entity(izdelkiZrno.izbrisiIzdelek(id)).build();
     }
 
     @PUT
+    @Operation(
+            summary = "Posodobi izdelek",description = "Posodbi izdelek s podanimi id"
+    )
+    @APIResponses({
+            @APIResponse(description = "Izdelek je posodobljen", responseCode = "200",
+                    content = @Content(schema = @Schema(implementation = Izdelek.class))),
+            @APIResponse(description = "Izdelka s tem id-jem ne najde",responseCode = "404")
+    })
     @Path("/posodobiIzdelek/{id}")
     public Response posodobiIzdelek(@PathParam("id") Integer id, Izdelek izdelek){
         return Response.status(Response.Status.CREATED).entity(izdelkiZrno.posodobiIzdelek(id,izdelek)).build();
     }
 
     @Path("/ustvariIzdelekVTrgovinoInKategorijo")
-    @PUT
+    @Operation(
+            summary = "Ustvari izdelek v trgovino in kategorijo",description = "Ustvari nov izdelek s podanimi parametri in ga da v trgovino in kategorijo"
+    )
+    @APIResponses({
+            @APIResponse(description = "Ustvarjen izdelek je dodan v trgovino in kategorijo", responseCode = "201",
+                    content = @Content(schema = @Schema(implementation = Izdelek.class)))
+    })
+    @POST
     public Response ustvariIzdelekVTrgovinoInKategorijo(IzdelekDto izdelekDto){
         Izdelek izdelek= upravljanjeIzdelkovZrno.ustvariIzdelekVTrgovinoInKategorijo(izdelekDto);
         if(izdelek==null){
@@ -119,7 +140,4 @@ public class IzdelkiVir {
         }
         return Response.status(Response.Status.CREATED).entity(izdelek).build();
     }
-
-
-
 }
