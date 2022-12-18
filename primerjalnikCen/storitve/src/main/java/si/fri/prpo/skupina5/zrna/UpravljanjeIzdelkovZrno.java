@@ -81,15 +81,25 @@ public class UpravljanjeIzdelkovZrno {
     public Izdelek ustvariIzdelekVTrgovinoInKategorijo(IzdelekDto izdelekDto){
 
         List<Izdelek> seznamKategorije=kategorijaZrno.getIzdelkiFromKategorija(izdelekDto.getImeKategorije());
-        if(seznamKategorije.isEmpty()){
+        Kategorija kk=kategorijaZrno.getKategorijaFromIme(izdelekDto.getImeKategorije());
+        if(kk==null){
             log.info("Ta kategorija ne obstaja");
             return null;
         }
-        List<Izdelek> seznamTrgovine= trgovinaZrno.getTrgovinaSeznamFromIme(izdelekDto.getImeTrgovine());
-        if(seznamTrgovine.isEmpty()){
+     /*   if(seznamKategorije.isEmpty()){
+            log.info("Ta kategorija ne obstaja");
+            return null;
+        }*/
+        Trgovina tt=trgovinaZrno.getTrgovinaFromIme(izdelekDto.getImeTrgovine());
+        if(tt==null){
             log.info("Ta trgovina neobstaja");
             return null;
         }
+        List<Izdelek> seznamTrgovine= trgovinaZrno.getTrgovinaSeznamFromIme(izdelekDto.getImeTrgovine());
+     /*   if(seznamTrgovine.isEmpty()){
+            log.info("Ta trgovina neobstaja");
+            return null;
+        }*/
         Izdelek i =new Izdelek();
         i.setIme(izdelekDto.getImeIzdelka());
         i.setOpis(izdelekDto.getOpisIzdelka());
