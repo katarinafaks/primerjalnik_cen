@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: primerjalnik-cen-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: primerjalnik-cen
+  template:
+    metadata:
+      labels:
+        app: primerjalnik-cen
+    spec:
+      containers:
+        - image: katprpo/primerjalnik-cen
+          name: primerjalnik-cen
+          env:
+            - name: KUMULUZEE_DATASOURCES0_CONNECTIONURL
+              value: jdbc:postgresql://snuffleupagus.db.elephantsql.com:5432/vrszkgei
+            - name: KUMULUZEE_DATASOURCES0_USERNAME
+              value: vrszkgei
+            - name: KUMULUZEE_DATASOURCES0_PASSWORD
+              value: UbBqYTI9zA_NEG5ouDxaDdIQzHtIwaYn
+          ports:
+            - containerPort: 8080
+              name: server
+              protocol: TCP
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: primerjalnik-cen
+spec:
+  type: LoadBalancer
+  ports:
+    - port: 8080
+      protocol: TCP
+      targetPort: server
+  selector:
+    app: primerjalnik-cen
