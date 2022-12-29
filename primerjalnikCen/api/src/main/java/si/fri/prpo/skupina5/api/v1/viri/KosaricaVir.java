@@ -10,6 +10,7 @@ import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponses;
 import si.fri.prpo.skupina5.dtos.IzdelekDto;
 import si.fri.prpo.skupina5.dtos.KosaricaDto;
+import si.fri.prpo.skupina5.entitete.Izdelek;
 import si.fri.prpo.skupina5.entitete.Kategorija;
 import si.fri.prpo.skupina5.entitete.Kosarica;
 import si.fri.prpo.skupina5.izjeme.NeveljavnaKosaricaException;
@@ -170,6 +171,27 @@ public class KosaricaVir {
         }
         return Response.status(Response.Status.CREATED).entity(kosarica).build();
     }
+
+    @POST
+    @Operation(
+            summary = "Doda izdelek v košarico",description = "Dodaj izdelek s podanim id v košarico"
+    )
+    @APIResponses({
+            @APIResponse(description = "Izdelek je dodan v košarico", responseCode = "200",
+                    content = @Content(schema = @Schema(implementation = Kosarica.class))),
+            @APIResponse(description = "Izdelka s tem id-jem ne najde",responseCode = "404")
+    })
+    @Path("/dodajIzdelek/{id}/izdelki")
+    public Response dodajIzdelekVKosarico2(@PathParam("id") Integer id, Izdelek izdelek){
+        Kosarica kosarica=upravljanjeKosariceZrno.dodajIzdelekVKosarico2(id,izdelek);
+        if(kosarica==null){
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+        return Response.status(Response.Status.CREATED).entity(kosarica).build();
+    }
+
+
+
 
     @DELETE
     @Operation(

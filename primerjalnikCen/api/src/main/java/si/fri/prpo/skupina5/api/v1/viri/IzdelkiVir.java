@@ -15,6 +15,7 @@ import si.fri.prpo.skupina5.dtos.IzdelekDto;
 import si.fri.prpo.skupina5.entitete.Izdelek;
 
 import com.kumuluz.ee.rest.beans.QueryParameters;
+import si.fri.prpo.skupina5.odjemalci.SpellCheckApiOdjemalec;
 import si.fri.prpo.skupina5.zrna.IzdelkiZrno;
 import si.fri.prpo.skupina5.zrna.UpravljanjeIzdelkovZrno;
 
@@ -47,7 +48,8 @@ public class IzdelkiVir {
     @Inject
     private UpravljanjeIzdelkovZrno upravljanjeIzdelkovZrno;
 
-
+    @Inject
+    private SpellCheckApiOdjemalec spellCheckApiOdjemalec;
     @Context
     protected UriInfo uriInfo;
     
