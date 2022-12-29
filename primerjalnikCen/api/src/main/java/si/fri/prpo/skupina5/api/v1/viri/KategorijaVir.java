@@ -1,6 +1,7 @@
 package si.fri.prpo.skupina5.api.v1.viri;
 
 
+import com.kumuluz.ee.cors.annotations.CrossOrigin;
 import com.kumuluz.ee.rest.beans.QueryParameters;
 import org.eclipse.microprofile.openapi.annotations.Operation;
 import org.eclipse.microprofile.openapi.annotations.media.Content;
@@ -9,7 +10,6 @@ import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponses;
 import si.fri.prpo.skupina5.entitete.Izdelek;
 import si.fri.prpo.skupina5.entitete.Kategorija;
-import si.fri.prpo.skupina5.entitete.Kosarica;
 import si.fri.prpo.skupina5.zrna.KategorijaZrno;
 import si.fri.prpo.skupina5.zrna.UpravljanjeIzdelkovZrno;
 
@@ -26,6 +26,7 @@ import java.util.List;
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 @ApplicationScoped
+@CrossOrigin(supportedMethods = "GET,POST,PUT,DELETE,HEAD,OPTIONS")
 public class KategorijaVir {
 
 

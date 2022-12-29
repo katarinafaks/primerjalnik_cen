@@ -1,6 +1,7 @@
 package si.fri.prpo.skupina5.api.v1;
 
 
+import com.kumuluz.ee.cors.annotations.CrossOrigin;
 import org.eclipse.microprofile.openapi.annotations.OpenAPIDefinition;
 import org.eclipse.microprofile.openapi.annotations.info.Contact;
 import org.eclipse.microprofile.openapi.annotations.info.Info;
@@ -20,5 +21,6 @@ import java.io.Serial;
         license = @License(name="dev"),
         description = "API storitev za Primerjavo cen."),
         servers = @Server(url="http://localhost:8080/"))
+@CrossOrigin(supportedMethods = "GET,POST,PUT,DELETE,HEAD,OPTIONS")
 public class PrimerjalnikCenApplication extends Application {
 }

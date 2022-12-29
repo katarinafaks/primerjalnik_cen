@@ -1,5 +1,10 @@
 package si.fri.prpo.skupina5.api.v1.viri;
 
+
+
+
+import com.kumuluz.ee.configuration.utils.ConfigurationUtil;
+import com.kumuluz.ee.cors.annotations.CrossOrigin;
 import com.kumuluz.ee.rest.utils.JPAUtils;
 import org.eclipse.microprofile.openapi.annotations.Operation;
 import org.eclipse.microprofile.openapi.annotations.media.Content;
@@ -10,28 +15,31 @@ import si.fri.prpo.skupina5.dtos.IzdelekDto;
 import si.fri.prpo.skupina5.entitete.Izdelek;
 
 import com.kumuluz.ee.rest.beans.QueryParameters;
-import si.fri.prpo.skupina5.entitete.Kategorija;
 import si.fri.prpo.skupina5.zrna.IzdelkiZrno;
 import si.fri.prpo.skupina5.zrna.UpravljanjeIzdelkovZrno;
 
+import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.ws.rs.*;
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 
 @Path("izdelki")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 @ApplicationScoped
+@CrossOrigin(supportedMethods = "GET,POST,PUT,DELETE,HEAD,OPTIONS")
 public class IzdelkiVir {
-
-
 
     @Inject
     private IzdelkiZrno izdelkiZrno;
@@ -42,6 +50,9 @@ public class IzdelkiVir {
 
     @Context
     protected UriInfo uriInfo;
+    
+
+    private Logger log = Logger.getLogger(Izdelek.class.getSimpleName());
 
 
     @GET
@@ -96,6 +107,9 @@ public class IzdelkiVir {
         return Response.status(Response.Status.CREATED).entity(izdelkiZrno.dodajIzdelek(izdelek)).build();
     }
 
+
+
+
     @DELETE
     @Operation(
             summary = "Odstrani izdelek",description = "Odstrani izdelek s podanim id"
@@ -130,7 +144,8 @@ public class IzdelkiVir {
     )
     @APIResponses({
             @APIResponse(description = "Ustvarjen izdelek je dodan v trgovino in kategorijo", responseCode = "201",
-                    content = @Content(schema = @Schema(implementation = Izdelek.class)))
+                    content = @Content(schema = @Schema(implementation = Izdelek.class))),
+            @APIResponse(description = "Parametri niso pravilno izpolnjeni", responseCode = "404")
     })
     @POST
     public Response ustvariIzdelekVTrgovinoInKategorijo(IzdelekDto izdelekDto){
@@ -140,4 +155,7 @@ public class IzdelkiVir {
         }
         return Response.status(Response.Status.CREATED).entity(izdelek).build();
     }
+
+
+
 }

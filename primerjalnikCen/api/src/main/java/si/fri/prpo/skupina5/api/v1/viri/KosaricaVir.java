@@ -1,6 +1,7 @@
 package si.fri.prpo.skupina5.api.v1.viri;
 
 
+import com.kumuluz.ee.cors.annotations.CrossOrigin;
 import com.kumuluz.ee.rest.beans.QueryParameters;
 import org.eclipse.microprofile.openapi.annotations.Operation;
 import org.eclipse.microprofile.openapi.annotations.media.Content;
@@ -9,10 +10,9 @@ import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponses;
 import si.fri.prpo.skupina5.dtos.IzdelekDto;
 import si.fri.prpo.skupina5.dtos.KosaricaDto;
-import si.fri.prpo.skupina5.entitete.Izdelek;
 import si.fri.prpo.skupina5.entitete.Kategorija;
 import si.fri.prpo.skupina5.entitete.Kosarica;
-import si.fri.prpo.skupina5.entitete.Trgovina;
+import si.fri.prpo.skupina5.izjeme.NeveljavnaKosaricaException;
 import si.fri.prpo.skupina5.zrna.KosaricaZrno;
 import si.fri.prpo.skupina5.zrna.UpravljanjeKosariceZrno;
 
@@ -29,6 +29,7 @@ import java.util.List;
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 @ApplicationScoped
+@CrossOrigin(supportedMethods = "GET,POST,PUT,DELETE,HEAD,OPTIONS")
 public class KosaricaVir {
 
 
@@ -132,18 +133,23 @@ public class KosaricaVir {
         return Response.status(Response.Status.OK).entity(upravljanjeKosariceZrno.preveriKosarico(kosaricaDto)).build();
     }
 
-    @GET
+    @POST
     @Operation(
             summary = "Vrne ceno košarice",description = "Vrne ceno košarice v trgovini s podanim id"
     )
     @APIResponses({
             @APIResponse(description = "Cena košarice", responseCode = "200",
                     content = @Content(schema = @Schema(implementation = Kosarica.class))),
-            @APIResponse(description = "Trgovine s tem id-jem ne najde",responseCode = "404")
+            @APIResponse(description = "Trgovine s tem id-jem ne najde",responseCode = "404"),
+            @APIResponse(description = "Kosarica je prazna",responseCode = "500")
     })
     @Path("cenaKosarice/trgovina/{TrgovinaId}")
-    public Response cenaKosarice(@PathParam("TrgovinaId") Integer TrgovinaId,Kosarica kosarica){
+    public Response cenaKosarice(@PathParam("TrgovinaId") Integer TrgovinaId,Kosarica kosarica) {
         int cena=upravljanjeKosariceZrno.IzracunajCenoKosariceByTrg(kosarica,TrgovinaId);
+        if(cena==0){
+            //throw new NeveljavnaKosaricaException("Kosarica je prazna");
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
         return Response.status(Response.Status.OK).entity(cena).build();
     }
 
