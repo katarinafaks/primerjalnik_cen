@@ -1,5 +1,6 @@
 package si.fri.prpo.skupina5.zrna;
 
+import com.kumuluz.ee.configuration.utils.ConfigurationUtil;
 import com.kumuluz.ee.rest.beans.QueryParameters;
 import com.kumuluz.ee.rest.utils.JPAUtils;
 import si.fri.prpo.skupina5.entitete.Izdelek;
@@ -39,6 +40,7 @@ public class KosaricaZrno {
         idZrna = UUID.randomUUID().toString();
 
         log.info("Inicializacija zrna " + KosaricaZrno.class.getSimpleName() + " z ID: " + idZrna);
+
 
         // Initialize sources
     }

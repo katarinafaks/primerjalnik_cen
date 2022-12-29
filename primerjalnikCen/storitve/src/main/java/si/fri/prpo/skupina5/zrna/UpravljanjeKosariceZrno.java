@@ -9,6 +9,7 @@ import si.fri.prpo.skupina5.dtos.TrgovinaDto;
 import si.fri.prpo.skupina5.entitete.Izdelek;
 import si.fri.prpo.skupina5.entitete.Kosarica;
 import si.fri.prpo.skupina5.entitete.Trgovina;
+import si.fri.prpo.skupina5.izjeme.NeveljavnaKosaricaException;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
@@ -62,12 +63,14 @@ public class UpravljanjeKosariceZrno {
     @BeleziKlice
     public int IzracunajCenoKosariceByTrg(Kosarica k,int trgovinaId){
         List<Izdelek> izdelkiKosarice=k.getIzdelki();
+
+        if(izdelkiKosarice.isEmpty()){
+            throw new NeveljavnaKosaricaException("Kosarica je prazna");
+        }
+
         ListIterator<Izdelek> listIterator = izdelkiKosarice.listIterator();
         int cena=0;
         int i=0;
-        if(izdelkiKosarice.isEmpty()){
-            throw new NeveljavnaKosaricaException("Kosarica je prazna.");
-        }
         while(listIterator.hasNext()){
             String ime=izdelkiKosarice.get(i).getIme();
 
@@ -144,6 +147,31 @@ public class UpravljanjeKosariceZrno {
         log.info("V kosarico " + k.getIme() + "je dodan izdelek " + i.getIme());
         return k;
     }
+
+    public Kosarica dodajIzdelekVKosarico2(int kosaricaId,Izdelek izdelek){
+        if(izdelek == null){
+            log.info("Izdelek ne obstaja");
+            return null;
+        }
+        if(izdelek.getId()==null){
+            izdelkiZrno.dodajIzdelek(izdelek);
+        }
+        Kosarica k =kosaricaZrno.getKosaricaById(kosaricaId);
+        if(k==null){
+            log.info("Kosarica ne obstaja");
+            return null;
+        }
+        List<Izdelek>seznam=k.getIzdelki();
+        seznam.add(izdelek);
+        k.setIzdelki(seznam);
+        kosaricaZrno.posodobiKosarico(kosaricaId,k);
+        izdelek.setKosarica(k);
+        izdelkiZrno.posodobiIzdelek(izdelek.getId(),izdelek);
+        log.info("V kosarico " + k.getIme() + "je dodan izdelek " + izdelek.getIme());
+        return k;
+    }
+
+
 
     //vrne kosarico
     public Kosarica odstraniIzdelekizKosarice(int kosaricaId, int izdelekId){
