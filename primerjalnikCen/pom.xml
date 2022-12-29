@@ -23,6 +23,7 @@
         <kumuluzee-rest.version>1.5.1</kumuluzee-rest.version>
         <kumuluzee-openapi.version>1.4.0</kumuluzee-openapi.version>
         <kumuluzee-config-mp.version>2.0.0</kumuluzee-config-mp.version>
+        <kumuluzee-cors.version>2.0.0</kumuluzee-cors.version>
     </properties>
 
     <dependencyManagement>
