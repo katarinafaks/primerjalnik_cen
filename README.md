@@ -5,5 +5,5 @@ Projekt je razdeljen na tri module:
 - Storitve
 - Api
 
-#> Stran je dostopna na naslednjem naslov
-#> http://localhost:8080/servlet
+<!-- Stran je dostopna na naslednjem naslov -->
+<!-- http://localhost:8080/servlet -->
